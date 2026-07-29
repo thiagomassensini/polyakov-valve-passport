@@ -1,0 +1,11 @@
+name = "polyakov-valve-passport"
+version = "0.1.0"
+defaultTargets = ["PolyakovValvePassport"]
+
+[[require]]
+name = "thermal-valve-passport"
+git = "https://github.com/thiagomassensini/thermal-valve-passport.git"
+rev = "v0.4.0"
+
+[[lean_lib]]
+name = "PolyakovValvePassport"
