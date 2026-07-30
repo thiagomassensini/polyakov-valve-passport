@@ -32,6 +32,13 @@ The project depends on
 [`thermal-valve-passport` v0.4.0](https://github.com/thiagomassensini/thermal-valve-passport/releases/tag/v0.4.0)
 for carrier removal and exact passport reconstruction.
 
+## Scope
+
+The certified statements are algebraic. They do not assert a phase
+transition, a critical temperature, a continuum limit, or a phenomenological
+fit. Numerical Checkpoint 12 artifacts are intentionally kept outside this
+formal library.
+
 ## Formal modules
 
 - `PolyakovValvePassport/TraceCompatibility.lean`
@@ -39,7 +46,13 @@ for carrier removal and exact passport reconstruction.
 - `PolyakovValvePassport/ModeMixing.lean`
 - `PolyakovValvePassport/Adjoint.lean`
 
+See [`docs/FORMALIZATION.md`](docs/FORMALIZATION.md) for the theorem map.
+
 ## Verification
 
 CI builds the public root with `lake build --wfail`, rejects `sorry`, `admit`,
 and project axioms, and recompiles `PolyakovValvePassport.lean` directly.
+
+## License
+
+Apache-2.0.

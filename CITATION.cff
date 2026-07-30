@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the software release."
+title: "Polyakov Valve Passport"
+type: software
+authors:
+  - family-names: Massensini
+    given-names: Thiago
+repository-code: "https://github.com/thiagomassensini/polyakov-valve-passport"
+url: "https://github.com/thiagomassensini/polyakov-valve-passport"
+license: Apache-2.0
+version: 0.1.0
+date-released: 2026-07-29
+keywords:
+  - Lean 4
+  - Polyakov loop
+  - carrier covariance
+  - structural passport
+  - trace compatibility
+  - Hankel defect
+  - finite mode mixing
+  - formalized mathematics

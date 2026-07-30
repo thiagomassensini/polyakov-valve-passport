@@ -1,0 +1,23 @@
+{
+  "title": "Polyakov Valve Passport",
+  "description": "Independent Lean 4 formalization of exact three-channel Polyakov trace compatibility, invariance under independent carrier dressings, fundamental and adjoint structural passports, and the finite-family Hankel mixing identity with nonnegativity and an exact equality case.",
+  "upload_type": "software",
+  "license": "Apache-2.0",
+  "version": "0.1.0",
+  "publication_date": "2026-07-29",
+  "creators": [
+    {
+      "name": "Massensini, Thiago"
+    }
+  ],
+  "keywords": [
+    "Lean 4",
+    "formalized mathematics",
+    "Polyakov loop",
+    "carrier covariance",
+    "structural passport",
+    "trace compatibility",
+    "Hankel defect",
+    "finite mode mixing"
+  ]
+}
