@@ -159,7 +159,7 @@ end FiniteFamily
 
 section OrderedFiniteFamily
 
-variable {ι : Type*} [DecidableEq ι]
+variable {ι : Type*}
 variable {R : Type*} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
 
 /-- Pair energy is nonnegative for nonnegative weights. -/
