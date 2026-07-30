@@ -32,7 +32,7 @@ theorem twoModeHankelDefect
 
 section OrderedTwoMode
 
-variable {R : Type*} [LinearOrderedField R]
+variable {R : Type*} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
 
 /-- The two-mode defect is nonnegative for a convex mixture. -/
 theorem twoModeHankelDefect_nonneg
@@ -67,7 +67,7 @@ end OrderedTwoMode
 
 section FiniteFamily
 
-variable {ι : Type*} [DecidableEq ι]
+variable {ι : Type*}
 
 /-- Total weight of a finite mode family. -/
 def totalModeWeight (s : Finset ι) (w : ι → K) : K :=
@@ -160,7 +160,7 @@ end FiniteFamily
 section OrderedFiniteFamily
 
 variable {ι : Type*} [DecidableEq ι]
-variable {R : Type*} [LinearOrderedField R]
+variable {R : Type*} [Field R] [LinearOrder R] [IsStrictOrderedRing R]
 
 /-- Pair energy is nonnegative for nonnegative weights. -/
 theorem orderedPairMixingEnergy_nonneg
