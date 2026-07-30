@@ -90,7 +90,7 @@ theorem antifundamental_normalized_passport_trace
       antiquarkStructuralTrace phibar := by
   simp [antifundamentalPassport,
     fundamental_normalized_passport_trace,
-    antiquarkStructuralTrace]
+    antiquarkStructuralTrace, quarkStructuralTrace]
 
 /-- First fundamental curvature coordinate. -/
 theorem fundamental_normalized_passport_curvature_zero
