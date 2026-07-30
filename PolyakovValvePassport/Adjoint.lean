@@ -57,6 +57,7 @@ theorem adjointRealPassport_trace (phi : K) :
   simp [adjointRealPassport, pow_two,
     ThermalValvePassport.Passport.normalized,
     gluonStructuralTrace]
+  ring
 
 /-- The canonical adjoint passport reconstructs every coefficient. -/
 theorem adjointRealPassport_reconstructs
