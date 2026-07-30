@@ -1,0 +1,108 @@
+name: Lean CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and kernel checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean toolchain manager
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --proto '=https' --tlsv1.2 -sSf \
+            https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build with captured diagnostics
+        id: build
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          lake update > build.log 2>&1
+          build_status=$?
+          if [ "$build_status" -eq 0 ]; then
+            lake exe cache get >> build.log 2>&1
+            build_status=$?
+          fi
+          if [ "$build_status" -eq 0 ]; then
+            lake build --wfail >> build.log 2>&1
+            build_status=$?
+          fi
+          tail -n 250 build.log
+          echo "exit_code=${build_status}" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-build-log
+          path: build.log
+      - name: Enforce successful build
+        shell: bash
+        run: test "${{ steps.build.outputs.exit_code }}" = "0"
+      - name: Reject proof placeholders
+        shell: bash
+        run: |
+          if git grep -nE '(^|[^A-Za-z])(sorry|admit|axiom)([^A-Za-z]|$)' -- '*.lean'; then
+            echo 'Proof placeholder or user axiom found.'
+            exit 1
+          fi
+      - name: Recheck public root
+        shell: bash
+        run: lake env lean PolyakovValvePassport.lean
+
+  release:
+    name: Tag and GitHub release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create or verify versioned release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(tr -d '[:space:]' < VERSION)"
+          TAG="v${VERSION}"
+
+          if ! gh release view "${TAG}" >/dev/null 2>&1; then
+            if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+              gh release create "${TAG}" \
+                --verify-tag \
+                --title "Polyakov Valve Passport ${TAG}" \
+                --notes-file RELEASE_NOTES.md
+            else
+              gh release create "${TAG}" \
+                --target "${GITHUB_SHA}" \
+                --title "Polyakov Valve Passport ${TAG}" \
+                --notes-file RELEASE_NOTES.md
+            fi
+          fi
+
+          RELEASE_URL="$(gh release view "${TAG}" --json url --jq .url)"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state=success \
+            -f context="release/${TAG}" \
+            -f description="GitHub release ${TAG} verified" \
+            -f target_url="${RELEASE_URL}"
+          echo "Verified release: ${RELEASE_URL}"
